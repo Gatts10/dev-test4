@@ -10,7 +10,6 @@ class PriceController extends Controller
     {
         $prices = json_decode(file_get_contents(storage_path() . "/files/live_prices.json"), true);
 
-        echo "<pre>";
-        print_r($prices);
+        return response()->json($prices);
     }
 }

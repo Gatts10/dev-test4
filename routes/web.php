@@ -17,6 +17,3 @@ use App\Http\Controllers\PriceController;
 Route::get('/', function () {
     return view('app');
 });
-
-//Prices Json_Data
-Route::get("prices", [PriceController::class, "index"]);

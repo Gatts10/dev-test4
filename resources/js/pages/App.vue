@@ -1,6 +1,11 @@
 <template>
     <div class="container">
-        <form class="form-inline" style="margin-top: 100px; text-align: center">
+        <form
+            class="form-inline"
+            style="margin-top: 100px; text-align: center"
+            ref="form"
+            @submit.prevent="fetchProducts"
+        >
             <div class="form-group mb-2">
                 <label for="staticEmail2" class="sr-only">Search Product</label>
             </div>
@@ -11,14 +16,15 @@
                     style="display: inline; width: inherit !important"
                     id="sku"
                     placeholder="sku"
+                    v-model="form.sku"
                 />
             </div>
             <button type="submit" class="btn btn-primary mb-2">Search</button>
         </form>
 
-        <div v-for="price in prices" :key="price.id">
-            {{ price.sku }}
-            {{ price.price }}
+        <div v-for="product in products" :key="product.id">
+            {{ product.sku }}
+            {{ product.price }}
         </div>
     </div>
 </template>
@@ -27,19 +33,22 @@
 export default {
     data() {
         return {
-            prices: [],
+            form: {
+                sku: "",
+            },
+            products: [],
         };
     },
 
     created: function () {
-        this.fetchPrices();
+        this.fetchProducts();
     },
 
     methods: {
-        fetchPrices() {
-            let uri = "/prices";
+        fetchProducts() {
+            let uri = 'http://127.0.0.1:8000/api/prices/' + this.form.sku;
             axios.get(uri).then((response) => {
-                this.prices = response.data;
+                this.products = response.data;
             });
         },
     },

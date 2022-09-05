@@ -19,4 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('prices', PriceController::class);
+Route::get('prices', [PriceController::class, 'index']);
+Route::get('prices/sku/{skus}', [PriceController::class, 'sku']);
+Route::get('prices/account/{accounts}', [PriceController::class, 'account']);

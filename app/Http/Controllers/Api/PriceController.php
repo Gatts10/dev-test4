@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\PriceResource;
+use App\Models\Account;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 
 class PriceController extends Controller
 {
@@ -25,7 +25,7 @@ class PriceController extends Controller
         return response()->json($this->prices);
     }
 
-    public function show($skus)
+    public function sku($skus)
     {
         $skus_array = explode(",", $skus);
         $skus_array = array_map('trim', $skus_array);
@@ -50,5 +50,24 @@ class PriceController extends Controller
         }
 
         return response()->json($products);
+    }
+
+    public function account($accounts)
+    {
+        $accounts_from_json = new Collection($this->prices);
+
+        $accounts = Account::where('external_reference', $accounts)->get();
+
+        if ($accounts->isEmpty()) {
+            return response()->json([
+                'message' => 'Record not found.'
+            ], 422);
+        }
+
+        foreach ($accounts as $account) {
+            $json_account = $accounts_from_json->where('account', $account->external_reference)->sortBy('price')->values()->first();
+        }
+
+        return response()->json([$json_account]);
     }
 }

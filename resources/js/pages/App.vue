@@ -100,8 +100,10 @@
                     <p class="card-text">
                         {{ account.account }}
                     </p>
-                     <p class="card-text" style="font-weight: bold">
+                    <p class="card-text" style="font-weight: bold">
                         {{ account.price }}
+                        <br />
+                        (Lowest Price)
                     </p>
                 </div>
             </div>
@@ -137,30 +139,34 @@ export default {
                 .then((response) => {
                     this.products = response.data;
                     this.errors = false;
-                    this.form1.sku = '';
+                    this.form1.sku = "";
                     this.accounts = [];
                 })
                 .catch((error) => {
                     if (error.response.status === 422) {
                         this.products = null;
                         this.errors = error.response.data.message;
+                        this.accounts = [];
                     }
                 });
         },
         fetchAccounts() {
-            let uri = "http://127.0.0.1:8000/api/prices/account/" + this.form2.account;
+            let uri =
+                "http://127.0.0.1:8000/api/prices/account/" +
+                this.form2.account;
             axios
                 .get(uri)
                 .then((response) => {
                     this.accounts = response.data;
                     this.errors = false;
-                    this.form2.account = '';
+                    this.form2.account = "";
                     this.products = [];
                 })
                 .catch((error) => {
                     if (error.response.status === 422) {
                         this.accounts = null;
                         this.errors = error.response.data.message;
+                        this.products = [];
                     }
                 });
         },
